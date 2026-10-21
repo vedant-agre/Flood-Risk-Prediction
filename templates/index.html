@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flood Risk Assessment | FODS Course Project</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="brand">
+                <span class="brand-badge">VIT • FODS Course Project</span>
+                <h1>🌊 Flood Risk Assessment AI</h1>
+                <p class="subtitle">Data-Driven Flood Risk Modeling Using Rainfall and Environmental Indicators (7 Steps of Data Science)</p>
+            </div>
+            <div class="nav-links">
+                <button class="nav-btn active" onclick="switchTab('assess-tab')">Assessment Dashboard</button>
+                <button class="nav-btn" onclick="switchTab('steps-tab')">7 Steps Methodology</button>
+                <button class="nav-btn" onclick="switchTab('models-tab')">Model Benchmark</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- TAB 1: Assessment Dashboard -->
+        <section id="assess-tab" class="tab-content active">
+            <!-- Quick Preset Controls -->
+            <div class="preset-card">
+                <span class="preset-label">⚡ Quick Test Scenarios:</span>
+                <div class="preset-buttons">
+                    <button class="preset-btn" onclick="loadPreset('baseline')">Standard Baseline (Low Risk)</button>
+                    <button class="preset-btn" onclick="loadPreset('monsoon')">Heavy Monsoon Surge (High Risk)</button>
+                    <button class="preset-btn" onclick="loadPreset('catastrophic')">Extreme Multi-Factor Disaster (Severe)</button>
+                    <button class="preset-btn" onclick="loadPreset('urban')">Urban Choke & Siltation (Moderate/High)</button>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Left: Indicator Inputs (4 Domains) -->
+                <div class="input-section">
+                    <form id="assessment-form">
+                        <!-- Domain 1: Meteorological -->
+                        <div class="domain-card">
+                            <div class="domain-header">
+                                <span class="domain-icon">🌧️</span>
+                                <h3>1. Meteorological Indicators</h3>
+                            </div>
+                            <div class="slider-group">
+                                <label for="MonsoonIntensity">
+                                    <span>Monsoon Intensity (Rainfall Volume)</span>
+                                    <span class="val-display" id="val-MonsoonIntensity">5</span>
+                                </label>
+                                <input type="range" id="MonsoonIntensity" name="MonsoonIntensity" min="0" max="15" value="5" oninput="updateVal('MonsoonIntensity')">
+                            </div>
+                            <div class="slider-group">
+                                <label for="ClimateChange">
+                                    <span>Climate Change Severity Factor</span>
+                                    <span class="val-display" id="val-ClimateChange">5</span>
+                                </label>
+                                <input type="range" id="ClimateChange" name="ClimateChange" min="0" max="15" value="5" oninput="updateVal('ClimateChange')">
+                            </div>
+                        </div>
+
+                        <!-- Domain 2: Hydrological & Topographical -->
+                        <div class="domain-card">
+                            <div class="domain-header">
+                                <span class="domain-icon">🏔️</span>
+                                <h3>2. Hydrological & Topography</h3>
+                            </div>
+                            <div class="slider-grid-2">
+                                <div class="slider-group">
+                                    <label for="TopographyDrainage">
+                                        <span>Topography Drainage</span>
+                                        <span class="val-display" id="val-TopographyDrainage">5</span>
+                                    </label>
+                                    <input type="range" id="TopographyDrainage" name="TopographyDrainage" min="0" max="15" value="5" oninput="updateVal('TopographyDrainage')">
+                                </div>
+                                <div class="slider-group">
+                                    <label for="RiverManagement">
+                                        <span>River Management</span>
+                                        <span class="val-display" id="val-RiverManagement">5</span>
+                                    </label>
+                                    <input type="range" id="RiverManagement" name="RiverManagement" min="0" max="15" value="5" oninput="updateVal('RiverManagement')">
+                                </div>
+                                <div class="slider-group">
+                                    <label for="DamsQuality">
+                                        <span>Dams Quality</span>
+                                        <span class="val-display" id="val-DamsQuality">5</span>
+                                    </label>
+                                    <input type="range" id="DamsQuality" name="DamsQuality" min="0" max="15" value="5" oninput="updateVal('DamsQuality')">
+                                </div>
+                                <div class="slider-group">
+                                    <label for="Siltation">
+                                        <span>River Siltation Level</span>
+                                        <span class="val-display" id="val-Siltation">5</span>
+                                    </label>
+                                    <input type="range" id="Siltation" name="Siltation" min="0" max="15" value="5" oninput="updateVal('Siltation')">
+                                </div>
+                                <div class="slider-group">
+                                    <label for="Watersheds">
+                                        <span>Watersheds Buffer Score</span>
+                                        <span class="val-display" id="val-Watersheds">5</span>
+                                    </label>
+                                    <input type="range" id="Watersheds" name="Watersheds" min="0" max="15" value="5" oninput="updateVal('Watersheds')">
+                                </div>
+                                <div class="slider-group">
+                                    <label for="CoastalVulnerability">
+                                        <span>Coastal Vulnerability</span>
+                                        <span class="val-display" id="val-CoastalVulnerability">5</span>
+                                    </label>
+                                    <input type="range" id="CoastalVulnerability" name="CoastalVulnerability" min="0" max="15" value="5" oninput="updateVal('CoastalVulnerability')">
+                                </div>
+                                <div class="slider-group">
+                                    <label for="Landslides">
+                                        <span>Landslides Likelihood</span>
+                                        <span class="val-display" id="val-Landslides">5</span>
+                                    </label>
+                                    <input type="range" id="Landslides" name="Landslides" min="0" max="15" value="5" oninput="updateVal('Landslides')">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Domain 3: Environmental & Land-Use -->
+                        <div class="domain-card">
+                            <div class="domain-header">
+                                <span class="domain-icon">🌳</span>
+                                <h3>3. Environmental & Land Use</h3>
+                            </div>
+                            <div class="slider-grid-2">
+                                <div class="slider-group">
+                                    <label for="Deforestation">
+                                        <span>Deforestation Rate</span>
+                                        <span class="val-display" id="val-Deforestation">5</span>
+                                    </label>
+                                    <input type="range" id="Deforestation" name="Deforestation" min="0" max="15" value="5" oninput="updateVal('Deforestation')">
+                                </div>
+                                <div class="slider-group">
+                                    <label for="Urbanization">
+                                        <span>Urbanization & Impervious Area</span>
+                                        <span class="val-display" id="val-Urbanization">5</span>
+                                    </label>
+                                    <input type="range" id="Urbanization" name="Urbanization" min="0" max="15" value="5" oninput="updateVal('Urbanization')">
+                                </div>
+                                <div class="slider-group">
+                                    <label for="AgriculturalPractices">
+                                        <span>Agricultural Practices Risk</span>
+                                        <span class="val-display" id="val-AgriculturalPractices">5</span>
+                                    </label>
+                                    <input type="range" id="AgriculturalPractices" name="AgriculturalPractices" min="0" max="15" value="5" oninput="updateVal('AgriculturalPractices')">
+                                </div>
+                                <div class="slider-group">
+                                    <label for="WetlandLoss">
+                                        <span>Wetland & Basin Loss</span>
+                                        <span class="val-display" id="val-WetlandLoss">5</span>
+                                    </label>
+                                    <input type="range" id="WetlandLoss" name="WetlandLoss" min="0" max="15" value="5" oninput="updateVal('WetlandLoss')">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Domain 4: Infrastructural & Socio-Political -->
+                        <div class="domain-card">
+                            <div class="domain-header">
+                                <span class="domain-icon">🏢</span>
+                                <h3>4. Infrastructure & Governance</h3>
+                            </div>
+                            <div class="slider-grid-2">
+                                <div class="slider-group">
+                                    <label for="DrainageSystems">
+                                        <span>Drainage Systems Capacity</span>
+                                        <span class="val-display" id="val-DrainageSystems">5</span>
+                                    </label>
+                                    <input type="range" id="DrainageSystems" name="DrainageSystems" min="0" max="15" value="5" oninput="updateVal('DrainageSystems')">
+                                </div>
+                                <div class="slider-group">
+                                    <label for="DeterioratingInfrastructure">
+                                        <span>Deteriorating Infrastructure</span>
+                                        <span class="val-display" id="val-DeterioratingInfrastructure">5</span>
+                                    </label>
+                                    <input type="range" id="DeterioratingInfrastructure" name="DeterioratingInfrastructure" min="0" max="15" value="5" oninput="updateVal('DeterioratingInfrastructure')">
+                                </div>
+                                <div class="slider-group">
+                                    <label for="Encroachments">
+                                        <span>Floodplain Encroachments</span>
+                                        <span class="val-display" id="val-Encroachments">5</span>
+                                    </label>
+                                    <input type="range" id="Encroachments" name="Encroachments" min="0" max="15" value="5" oninput="updateVal('Encroachments')">
+                                </div>
+                                <div class="slider-group">
+                                    <label for="PopulationScore">
+                                        <span>Population Exposure Score</span>
+                                        <span class="val-display" id="val-PopulationScore">5</span>
+                                    </label>
+                                    <input type="range" id="PopulationScore" name="PopulationScore" min="0" max="15" value="5" oninput="updateVal('PopulationScore')">
+                                </div>
+                                <div class="slider-group">
+                                    <label for="IneffectiveDisasterPreparedness">
+                                        <span>Preparedness Deficiency</span>
+                                        <span class="val-display" id="val-IneffectiveDisasterPreparedness">5</span>
+                                    </label>
+                                    <input type="range" id="IneffectiveDisasterPreparedness" name="IneffectiveDisasterPreparedness" min="0" max="15" value="5" oninput="updateVal('IneffectiveDisasterPreparedness')">
+                                </div>
+                                <div class="slider-group">
+                                    <label for="InadequatePlanning">
+                                        <span>Inadequate Urban Planning</span>
+                                        <span class="val-display" id="val-InadequatePlanning">5</span>
+                                    </label>
+                                    <input type="range" id="InadequatePlanning" name="InadequatePlanning" min="0" max="15" value="5" oninput="updateVal('InadequatePlanning')">
+                                </div>
+                                <div class="slider-group">
+                                    <label for="PoliticalFactors">
+                                        <span>Political & Governance Factor</span>
+                                        <span class="val-display" id="val-PoliticalFactors">5</span>
+                                    </label>
+                                    <input type="range" id="PoliticalFactors" name="PoliticalFactors" min="0" max="15" value="5" oninput="updateVal('PoliticalFactors')">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" class="submit-btn" onclick="runAssessment()">
+                            🔍 Run Multi-Factor Flood Risk Assessment
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Right: Prediction Results & Decision Support Panel -->
+                <div class="results-section">
+                    <div class="result-card" id="result-box">
+                        <div class="result-header">
+                            <h2>Assessment Output</h2>
+                            <span class="status-indicator live">Model Live</span>
+                        </div>
+
+                        <div class="tier-display" id="tier-badge-container">
+                            <span class="risk-badge badge-moderate" id="risk-tier-badge">MODERATE RISK</span>
+                            <div class="prob-percentage" id="prob-percentage">50.2%</div>
+                            <span class="prob-subtext">Estimated Regional Flood Probability</span>
+                        </div>
+
+                        <div class="meter-bar-container">
+                            <div class="meter-bar" id="meter-bar" style="width: 50.2%;"></div>
+                        </div>
+
+                        <!-- Class Probabilities Breakdown -->
+                        <div class="confidence-box">
+                            <h4>Classification Confidence Across Tiers:</h4>
+                            <div class="tier-bars">
+                                <div class="tier-row">
+                                    <span>Low Risk:</span>
+                                    <div class="tier-progress"><div id="prob-bar-low" class="bar-fill low" style="width: 10%;"></div></div>
+                                    <span id="prob-val-low">10%</span>
+                                </div>
+                                <div class="tier-row">
+                                    <span>Moderate:</span>
+                                    <div class="tier-progress"><div id="prob-bar-mod" class="bar-fill mod" style="width: 70%;"></div></div>
+                                    <span id="prob-val-mod">70%</span>
+                                </div>
+                                <div class="tier-row">
+                                    <span>High Risk:</span>
+                                    <div class="tier-progress"><div id="prob-bar-high" class="bar-fill high" style="width: 15%;"></div></div>
+                                    <span id="prob-val-high">15%</span>
+                                </div>
+                                <div class="tier-row">
+                                    <span>Severe:</span>
+                                    <div class="tier-progress"><div id="prob-bar-sev" class="bar-fill sev" style="width: 5%;"></div></div>
+                                    <span id="prob-val-sev">5%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actionable Mitigation Advisory -->
+                        <div class="advisory-box">
+                            <h4>📋 Civil Protection & Mitigation Actions:</h4>
+                            <ul id="mitigation-list">
+                                <li>Select indicators on the left and click 'Run Assessment' to generate site-specific mitigation protocols.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: 7 Steps Methodology -->
+        <section id="steps-tab" class="tab-content">
+            <div class="article-card">
+                <h2>The 7 Steps of Data Science Applied to Flood Risk Assessment</h2>
+                <p class="lead-text">
+                    This project rigorously executes the 7 foundational stages of the Data Science Life Cycle on a benchmark dataset of 50,000 meteorological and environmental records.
+                </p>
+
+                <div class="steps-timeline">
+                    <div class="step-item">
+                        <div class="step-num">Step 1</div>
+                        <div class="step-body">
+                            <h3>Problem Definition & Domain Understanding</h3>
+                            <p>
+                                Floods cause extensive casualties, infrastructure devastation, and billions in economic damages annually. 
+                                The objective is to formulate a multi-class predictive risk classification framework (Low, Moderate, High, Severe) 
+                                that maps multi-factor rainfall and watershed indicators to operational disaster response thresholds.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-num">Step 2</div>
+                        <div class="step-body">
+                            <h3>Data Collection, Multi-Source Integration & Merging</h3>
+                            <p>
+                                Simulated realistic institutional data acquisition across 3 separate entities: 
+                                <strong>Meteorological Telemetry</strong>, <strong>Geospatial Environmental Survey</strong>, and <strong>Civil Demographics</strong>. 
+                                Executed relational inner joins using primary key <code>basin_id</code> with strict 1-to-1 cardinality validation, 
+                                achieving 100% lossless integration across all 50,000 geographical catchment basins.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-num">Step 3</div>
+                        <div class="step-body">
+                            <h3>Data Cleaning & Preprocessing</h3>
+                            <p>
+                                Performed missing value verification (0 nulls), duplicate removal (0 duplicates), type auditing, and 
+                                Interquartile Range (IQR) anomaly profiling. Evaluated extreme readings as valid natural meteorological events.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-num">Step 4</div>
+                        <div class="step-body">
+                            <h3>Exploratory Data Analysis (EDA)</h3>
+                            <p>
+                                Generated univariate distributions, correlation matrices, target correlation hierarchies, and bivariate 
+                                interaction boxplots across risk classes. All figures exported at 300 DPI to <code>reports/figures/</code>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-num">Step 5</div>
+                        <div class="step-body">
+                            <h3>Feature Engineering & Selection</h3>
+                            <p>
+                                Formulated domain-specific indicators: <strong>Hydrological Stress Ratio</strong>, <strong>Environmental Degradation Index</strong>, 
+                                <strong>Infrastructure Resilience Index</strong>, and <strong>Human Exposure Index</strong>. Performed feature scaling and 
+                                80/20 stratified partitioning. Conducted a feature leakage audit to eliminate trivial linear sum dependencies.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-num">Step 6</div>
+                        <div class="step-body">
+                            <h3>Model Building & Evaluation</h3>
+                            <p>
+                                Benchmarked 6 algorithms across distinct algorithmic families using 5-Fold Stratified Cross-Validation: 
+                                Logistic Regression, Decision Trees, Random Forest, Gradient Boosting, Gaussian Naive Bayes, and K-Nearest Neighbors. 
+                                Evaluated via Accuracy, F1-Macro, Precision, Recall, Confusion Matrices, and Multi-Class ROC-AUC.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-num">Step 7</div>
+                        <div class="step-body">
+                            <h3>Data Insights, Deployment & Reporting</h3>
+                            <p>
+                                Deployed an operational Decision Support Web Dashboard, serialized model pipelines, generated a complete course 
+                                project report, and built an end-to-end reproducible Jupyter Notebook.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: Model Benchmark -->
+        <section id="models-tab" class="tab-content">
+            <div class="article-card">
+                <h2>Model Performance & Evaluation Benchmark</h2>
+                <p>Comparison of all 6 algorithms evaluated on the 10,000 unseen test samples using 5-Fold Stratified Cross Validation.</p>
+
+                <div class="table-responsive">
+                    <table class="metrics-table">
+                        <thead>
+                            <tr>
+                                <th>Algorithm Family</th>
+                                <th>Model Name</th>
+                                <th>5-Fold CV Acc</th>
+                                <th>Test Accuracy</th>
+                                <th>Precision (Macro)</th>
+                                <th>Recall (Macro)</th>
+                                <th>F1-Score (Macro)</th>
+                                <th>ROC-AUC (OVR)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="metrics-tbody">
+                            <tr>
+                                <td>Linear Classifier</td>
+                                <td><strong>Logistic Regression (Champion)</strong></td>
+                                <td>99.97%</td>
+                                <td><strong>100.00%</strong></td>
+                                <td>1.0000</td>
+                                <td>1.0000</td>
+                                <td><strong>1.0000</strong></td>
+                                <td><strong>1.0000</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Ensemble Boosting</td>
+                                <td>Gradient Boosting</td>
+                                <td>68.39%</td>
+                                <td>69.86%</td>
+                                <td>0.6724</td>
+                                <td>0.6612</td>
+                                <td>0.6638</td>
+                                <td>0.8988</td>
+                            </tr>
+                            <tr>
+                                <td>Bayesian</td>
+                                <td>Gaussian Naive Bayes</td>
+                                <td>65.18%</td>
+                                <td>65.22%</td>
+                                <td>0.6401</td>
+                                <td>0.6210</td>
+                                <td>0.6284</td>
+                                <td>0.8780</td>
+                            </tr>
+                            <tr>
+                                <td>Instance-Based</td>
+                                <td>K-Nearest Neighbors</td>
+                                <td>59.86%</td>
+                                <td>62.69%</td>
+                                <td>0.6184</td>
+                                <td>0.6025</td>
+                                <td>0.6078</td>
+                                <td>0.8528</td>
+                            </tr>
+                            <tr>
+                                <td>Ensemble Bagging</td>
+                                <td>Random Forest</td>
+                                <td>60.15%</td>
+                                <td>60.92%</td>
+                                <td>0.5689</td>
+                                <td>0.5412</td>
+                                <td>0.5513</td>
+                                <td>0.8479</td>
+                            </tr>
+                            <tr>
+                                <td>Decision Tree</td>
+                                <td>Decision Tree (Max Depth=10)</td>
+                                <td>43.46%</td>
+                                <td>44.56%</td>
+                                <td>0.4350</td>
+                                <td>0.4280</td>
+                                <td>0.4301</td>
+                                <td>0.6954</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="figures-gallery">
+                    <h3>Visual Evaluation Artifacts (Generated in <code>reports/figures/</code>)</h3>
+                    <div class="gallery-grid">
+                        <div class="gallery-item">
+                            <h4>06. Model Comparison Bar Chart</h4>
+                            <img src="/reports/figures/06_model_comparison_barchart.png" alt="Model Comparison" onerror="this.parentElement.style.display='none'">
+                        </div>
+                        <div class="gallery-item">
+                            <h4>07. Confusion Matrix (Champion Model)</h4>
+                            <img src="/reports/figures/07_confusion_matrix_best_model.png" alt="Confusion Matrix" onerror="this.parentElement.style.display='none'">
+                        </div>
+                        <div class="gallery-item">
+                            <h4>08. Multi-Class ROC Curves</h4>
+                            <img src="/reports/figures/08_roc_curves_multiclass.png" alt="ROC Curves" onerror="this.parentElement.style.display='none'">
+                        </div>
+                        <div class="gallery-item">
+                            <h4>09. Feature Importance Breakdown</h4>
+                            <img src="/reports/figures/09_feature_importances.png" alt="Feature Importance" onerror="this.parentElement.style.display='none'">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <p><strong>Fundamentals of Data Science (FODS) Course Project</strong> • Designed for VIT University Academic Assessment</p>
+            <p>Dataset: Kaggle Flood Prediction Benchmark (50,000 Records, 20 Indicators) • Multi-Class ML Risk Classifier</p>
+        </div>
+    </footer>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
